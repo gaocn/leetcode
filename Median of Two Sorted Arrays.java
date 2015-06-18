@@ -23,7 +23,27 @@ public class Solution {
         else
            return findKth(A, aL + aCnt, aR, B, bL, bR, k - aCnt);
      }
-
+    /*上述方法1的原始解法*/
+    private int findKth(int[] A, int aL, int aR, int[] B, int bL, int bR, int k) {
+         if(aL > aR) return B[bL + k - 1];
+         if(bL > bR) return A[aL + k - 1];
+         
+         int aMid = aL + (aR - aL) >> 1;
+         int bMid = bL + (bR - bL) >> 1;
+         
+         if(A[aMid] <= B[bMid]) {
+             if(k <= (aMid - aL) + (bMid - bL) + 1)
+                 return findKth(A, aL, aR, B, bL, bMid - 1, k);
+             else
+                 return findKth(A, aMid + 1, aR, B, bL, bR, k - (aMid - aL) - 1);
+         }
+         else {
+             if(k <= (aMid - aL) + (bMid - bL) + 1)
+                 return findKth(A, aL, aMid - 1, B, bL, bR, k);
+             else
+                 return findKth(A, aL, aR, B, bMid + 1, bR, k - (bMid - bL) - 1);
+         }
+     }
     /*方法2
     the main idea is to find the approximate location of the median and compare the elements around it to get the final result.
     时间复杂度: O(log(min(n,m)))
